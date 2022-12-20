@@ -25,11 +25,11 @@
 
 ## 下载sdk
 
-* [sdk下载](https://github.com/dangcingzzw/inspurcloud/archive/refs/heads/main.zip)
+* [sdk下载](https://github.com/dangcingzzw/inspur-php-sdk)
 
-## 安装sdk
+## sdk下载地址
 
-* composer require inspurcloud/php-oss-sdk
+* https://github.com/dangcingzzw/inspur-php-sdk
 
   
 
