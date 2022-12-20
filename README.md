@@ -23,8 +23,7 @@
 
 ## 下载sdk
 
-* [sdk下载](https://github.com/dangcingzzw/inspur-php-sdk)
-* https://github.com/dangcingzzw/inspur-php-sdk
+* [sdk下载](https://github.com/dangcingzzw/inspur-php-sdk/archive/refs/heads/main.zip)
 
 
 
