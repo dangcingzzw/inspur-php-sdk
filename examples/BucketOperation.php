@@ -36,13 +36,14 @@ use OSS\OSSClient;
 use OSS\OSSException;
 use function GuzzleHttp\json_encode;
 
-$ak = 'inspur-cl-oss';
+$ak = '*** Provide your Access Key ***';
 
-$sk = 'inspur-cl-oss';
+$sk = '*** Provide your Secret Key ***';
 
-$endpoint = 'http://10.110.64.152:8088/';
+$endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-zdemo';
+$bucketName = 'my-OSS-bucket-demo';
+
 
 
 /*
