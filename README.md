@@ -7,8 +7,6 @@
 > [环境准备](#环境准备)
 >
 > [下载sdk](#下载sdk)
->
-> [安装sdk](#安装sdk)
 
 ## 环境准备
 
@@ -26,12 +24,9 @@
 ## 下载sdk
 
 * [sdk下载](https://github.com/dangcingzzw/inspur-php-sdk)
-
-## sdk下载地址
-
 * https://github.com/dangcingzzw/inspur-php-sdk
 
-  
+
 
 ## 简单文件上传
 
