@@ -37,6 +37,7 @@ use OSS\OSSException;
 
 use function GuzzleHttp\json_encode;
 
+
 $ak = '*** Provide your Access Key ***';
 
 $sk = '*** Provide your Secret Key ***';
@@ -45,7 +46,7 @@ $endpoint = 'https://your-endpoint:443';
 
 $bucketName = 'my-OSS-bucket-demo';
 
-$objectKey = 'my-OSS-object-key-demo';
+$objectKey = 'my-OSS-$object-key-demo';
 
 /*
  * Constructs a OSS client instance with your account for accessing OSS
@@ -171,10 +172,6 @@ try {
     */
     doPartUpload();
 
-    /*
-    * clen multipart
-    */
-    aboutMultipartUpload();
 } catch (OSSException $e) {
     echo 'Response Code:' . $e->getStatusCode() . PHP_EOL;
     echo 'Error Message:' . $e->getExceptionMessage() . PHP_EOL;
@@ -188,15 +185,16 @@ function doPartUpload()
 {
     global $OSSClient;
     global $bucketName;
-    global $objectKey;
-    $resp = $OSSClient->initiateMultipartUpload(['Bucket' => $bucketName, 'Key' => $objectKey]);
+     $objectKey='sdfasfas2d22.rar';
+    $resp0 = $OSSClient->initiateMultipartUpload(['Bucket' => $bucketName, 'Key' => $objectKey]);
 
-    $uploadId = $resp['UploadId'];
+    $uploadId = $resp0['UploadId'];
+
     printf("Claiming a new upload id %s\n\n", $uploadId);
 
-    $task_list = $OSSClient->listMultipartUploads(['Bucket' => $bucketName, 'Key' => $objectKey]);
+    $resp2 = $OSSClient->listMultipartUploads(['Bucket' => $bucketName, 'Key' => $objectKey]);
     printf("task_list");
-    var_dump($task_list['Uploads']);
+    var_dump($resp2['Uploads']);
 
     $sampleFilePath = 'C:\Users\dangcingzzw\Desktop\bbb.rar'; //sample large file path
     //  you can prepare a large file in you filesystem first
@@ -222,46 +220,13 @@ function doPartUpload()
      * Upload multiparts to your bucket
      */
     printf("Begin to upload multiparts to OSS from a file\n\n");
-    for ($i = 0; $i < $partCount; $i++) {
-        $offset = $i * $partSize;
-        $currPartSize = ($i + 1 === $partCount) ? $fileLength - $offset : $partSize;
-        $partNumber = $i + 1;
-        $p = $OSSClient->uploadPartAsync([
+        $OSSClient->uploadPart([
             'Bucket' => $bucketName,
             'Key' => $objectKey,
             'UploadId' => $uploadId,
-            'PartNumber' => $partNumber,
-            'SourceFile' => $sampleFilePath,
-            'Offset' => $offset,
-            'PartSize' => $currPartSize
-        ], function ($exception, $resp) use (&$parts, $partNumber) {
-            $parts[] = ['PartNumber' => $partNumber, 'ETag' => $resp['ETag']];
-            printf("Part#" . strval($partNumber) . " done\n\n");
-        });
-
-        if ($promise === null) {
-            $promise = $p;
-        }
-    }
-
-    /*
-     * Waiting for all parts finished
-     */
-    $promise->wait();
-
-    usort($parts, function ($a, $b) {
-        if ($a['PartNumber'] === $b['PartNumber']) {
-            return 0;
-        }
-        return $a['PartNumber'] > $b['PartNumber'] ? 1 : -1;
-    });
-
-    /*
-     * Verify whether all parts are finished
-     */
-    if (count($parts) !== $partCount) {
-        throw new \RuntimeException('Upload multiparts fail due to some parts are not finished yet');
-    }
+            'PartNumber' => 1,
+            'Body' => 'Hello OBS'
+        ]);
 
 
     printf("Succeed to complete multiparts into an object named %s\n\n", $objectKey);
@@ -269,45 +234,37 @@ function doPartUpload()
     /*
      * View all parts uploaded recently
      */
+
     printf("Listing all parts......\n");
-    $resp = $OSSClient->listParts(['Bucket' => $bucketName, 'Key' => $objectKey, 'UploadId' => $uploadId]);
-    foreach ($resp['Parts'] as $part) {
+    $resp = $OSSClient -> listParts(['Bucket' => $bucketName, 'Key' => $objectKey, 'UploadId' => $uploadId]);
+
+    foreach ($resp['Parts'] as $part)
+    {
+        $parts=[['PartNumber'=>$part['PartNumber'], 'ETag'=>$part['ETag']]];
         printf("\tPart#%d, ETag=%s\n", $part['PartNumber'], $part['ETag']);
     }
-    printf("\n");
-//var_dump([
-//    'Bucket' => $bucketName,
-//    'Key' => $objectKey,
-//    'UploadId' => $uploadId,
-//    'Parts'=> $parts
-//]);die;
 
     /*
      * Complete to upload multiparts
      */
-    $resp = $OSSClient->completeMultipartUpload([
+    $resp4 = $OSSClient->completeMultipartUpload([
         'Bucket' => $bucketName,
         'Key' => $objectKey,
         'UploadId' => $uploadId,
         'Parts' => $parts
     ]);
-    var_dump($resp->toArray());
-}
+    var_dump($resp4->toArray());
 
-function aboutMultipartUpload()
-{
-    global $OSSClient;
-    global $bucketName;
-    $objectKey = 'oktest002';
-    $uploadId = '2~g2KlYL_7wBhF_3qfeWUn3_qIXOpGrQG';
-    $resp = $OSSClient->abortMultipartUpload(array(
+    $resp8 = $OSSClient->abortMultipartUpload(array(
         'Bucket' => $bucketName,
         'Key' => $objectKey,
         'UploadId' => $uploadId
     ));
-    printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
-    printf("RequestId:%s\n", $resp ['RequestId']);
+    printf("HttpStatusCode:%s\n", $resp8 ['HttpStatusCode']);
+    printf("RequestId:%s\n", $resp8 ['RequestId']);
 }
+
+
 
 function doObjectVersion()
 {
