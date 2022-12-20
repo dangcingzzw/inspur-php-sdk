@@ -462,7 +462,7 @@ abstract class AbstractSignature implements SignatureInterface
 		$result['dnsParam'] = $dnsParam;
 		$result['uriParam'] = $uriParam;
 		$result['requestUrl'] = $requestUrl;
-        var_dump($result);
+//        var_dump($result);
 		return $result;
 	}
 }
